@@ -10,7 +10,7 @@ if sys.version_info[:2] <= (2, 6):
 import collections
 import re
 import time
-import threading
+import listeners.tick
 import weakref
 import requests
 
@@ -68,7 +68,7 @@ class Client(object):
         self._previous = None
         self._recently_gotten_objects = collections.deque(maxlen=self._max_recently_gotten_objects)
         self._requests_served = 0
-        self._thread = threading.Thread(target=self._worker, name="message_sender")
+        self._thread = listeners.tick.GameThread(target=self._worker, name="message_sender")
         self._thread.setDaemon(True)
 
         if email or password:

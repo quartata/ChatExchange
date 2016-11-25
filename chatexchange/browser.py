@@ -5,7 +5,7 @@ if sys.version_info[:2] <= (2, 6):
     logging.Logger.getChild = lambda self, suffix:\
         self.manager.getLogger('.'.join((self.name, suffix)) if self.root is not self else suffix)
 import json
-import threading
+import listeners.tick
 import time
 
 from bs4 import BeautifulSoup
@@ -312,6 +312,9 @@ class Browser(object):
 
     def delete_message(self, message_id):
         return self.post_fkeyed('messages/%s/delete' % (message_id, ))
+
+    def move_message(self, message_id, from_room, to_room):
+        return self.post_fkeyed('admin/movePosts/%s' % (from_room,), {'ids': message_id, 'to': to_room})
 
     def get_history(self, message_id):
         """
@@ -688,7 +691,7 @@ class RoomSocketWatcher(object):
         self.ws = websocket.create_connection(
             wsurl, origin=self.browser.chat_root)
 
-        self.thread = threading.Thread(target=self._runner)
+        self.thread = listeners.tick.GameThread(target=self._runner)
         self.thread.setDaemon(True)
         self.thread.start()
 
@@ -720,7 +723,7 @@ class RoomPollingWatcher(object):
         self.killed = False
 
     def start(self):
-        self.thread = threading.Thread(target=self._runner)
+        self.thread = listeners.tick.GameThread(target=self._runner)
         self.thread.setDaemon(True)
         self.thread.start()
 
