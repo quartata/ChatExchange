@@ -203,6 +203,8 @@ class Client(object):
         action_type = action[0]
         if action_type == 'send':
             action_type, room_id, text = action
+        elif action_type == 'move':
+            action_type, message_id, from_room, to_room = action
         else:
             assert action_type == 'edit' or action_type == 'delete'
             action_type, message_id, text = action
@@ -223,6 +225,8 @@ class Client(object):
                     response = self._br.send_message(room_id, text)
                 elif action_type == 'edit':
                     response = self._br.edit_message(message_id, text)
+                elif action_type == 'move':
+                    response = self._br.move_message(message_id, from_room, to_room)
                 else:
                     assert action_type == 'delete'
                     response = self._br.delete_message(message_id)
