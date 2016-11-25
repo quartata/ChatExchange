@@ -1,3 +1,9 @@
+ChatExchange-Source.Python
+============
+
+A modified version of Source.Python for use with Source.Python. To install, retrieve ChatExchange's normal dependencies (see below for the original readme) as source tarballs, and extract the modules (not everything in the tarball, just where the code is) into `<mod folder>/addons/source-python/Python3`. Then place `chatexchange` in there as well.
+
+
 ChatExchange
 ============
 
