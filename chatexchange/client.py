@@ -205,6 +205,7 @@ class Client(object):
             action_type, room_id, text = action
         elif action_type == 'move':
             action_type, message_id, from_room, to_room = action
+            text = ""
         else:
             assert action_type == 'edit' or action_type == 'delete'
             action_type, message_id, text = action
