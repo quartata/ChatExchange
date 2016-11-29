@@ -314,7 +314,7 @@ class Browser(object):
         return self.post_fkeyed('messages/%s/delete' % (message_id, ))
 
     def move_message(self, message_id, from_room, to_room):
-        return self.post_fkeyed('admin/movePosts/%s' % (from_room.id,), {'ids': message_id, 'to': to_room.id})
+        return self.post_fkeyed('admin/movePosts/%s' % (from_room,), {'ids': message_id, 'to': to_room})
 
     def get_history(self, message_id):
         """

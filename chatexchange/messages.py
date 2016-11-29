@@ -140,7 +140,7 @@ class Message(object):
         self._logger.info("Queue length: %d.", self._client._request_queue.qsize())
         
     def move(self, to_room):
-        self._client._request_queue.put(('move', self.id, self.room, to_room))
+        self._client._request_queue.put(('move', self.id, self.room.id, to_room))
         
     def delete(self):
         self._client._request_queue.put(('delete', self.id, ''))
