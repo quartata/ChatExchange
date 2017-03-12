@@ -56,7 +56,7 @@ class Browser(object):
     @property
     def chat_root(self):
         assert self.host, "browser has no associated host"
-        return 'http://chat.%s' % (self.host,)
+        return 'https://chat.%s' % (self.host,)
 
     # request helpers
 
@@ -151,7 +151,8 @@ class Browser(object):
 
         if not self.session.cookies.get('usr', None):
             raise LoginError(
-                "failed to get `usr` cookie from Stack Exchange OpenID")
+                "failed to get `usr` cookie from Stack Exchange OpenID, "
+                "check credentials provided for accuracy")
 
     def login_site(self, host):
         """
@@ -160,8 +161,8 @@ class Browser(object):
         assert self.host is None or self.host is host
 
         self._se_openid_login_with_fkey(
-            'http://%s/users/login?returnurl = %%2f' % (host,),
-            'http://%s/users/authenticate' % (host,),
+            'https://%s/users/login?returnurl = %%2f' % (host,),
+            'https://%s/users/authenticate' % (host,),
             {
                 'oauth_version': '',
                 'oauth_server': '',
@@ -299,6 +300,10 @@ class Browser(object):
     def toggle_pinning(self, message_id):
         return self.post_fkeyed(
             'messages/%s/owner-star' % (message_id,))
+
+    def cancel_stars(self, message_id):
+        return self.post_fkeyed(
+            'messages/%s/unstar' % (message_id,))
 
     def send_message(self, room_id, text):
         return self.post_fkeyed(
@@ -549,7 +554,7 @@ class Browser(object):
 
         name = profile_soup.find('h1').text
 
-        is_moderator = bool('♦' in profile_soup.select('.user-status')[0].text)
+        is_moderator = bool(u'♦' in profile_soup.select('.user-status')[0].text)
         message_count = int(profile_soup.select('.user-message-count-xxl')[0].text)
         room_count = int(profile_soup.select('.user-room-count-xxl')[0].text)
         reputation_elements = profile_soup.select('.reputation-score')
